@@ -17,7 +17,7 @@ if __name__ == "__main__":
             ch.special_tokens,
         )
         dataset = prepare_dataset.execute(
-            ch.cc_mined_dir, ch.cache_dir, ch.CONTENT_COLUMN, ch.BATCH_SIZE
+            ch.cc_mined_dir, ch.cache_dir, ch.CONTENT_COLUMN, ch.BATCH_SIZE, ch.c4_sizes
         )
         trainer = prepare_trainer.execute(
             ch.VOCAB_SIZE, ch.special_tokens, ch.MIN_FREQUENCY, ch.MAX_TOKEN_LENGTH
