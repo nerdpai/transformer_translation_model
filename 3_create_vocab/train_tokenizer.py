@@ -1,5 +1,6 @@
 import datasets
 import typing
+import pandas as pd
 from pathlib import Path
 from tokenizers import (
     models,
@@ -13,6 +14,11 @@ def data_generator(
 ) -> typing.Iterator[list[str]]:
     for i in range(0, len(dataset), batch_size):
         content: typing.List[str] = dataset[i : i + batch_size][content_column]
+
+        df = pd.DataFrame(content, columns=["data"])
+        df = df[df["data"].notna()]
+        content = df["data"].tolist()
+
         yield content
 
 
