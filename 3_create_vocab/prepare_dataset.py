@@ -5,10 +5,11 @@ from datasets import (
     load_from_disk,
     IterableDataset,
 )
-from typing import Callable
+from typing import Callable, TypeAlias
 from pathlib import Path
 
-LANGS = ["en", "de", "fr"]
+
+Extractor: TypeAlias = Callable[[Path, list[str], str], Dataset]
 
 
 def concat_datasets(
@@ -26,10 +27,11 @@ def get_hub_datasets(
     name: str,
     language_prefix: str,
     cache_dir: Path,
+    langs: list[str],
     streaming: bool = False,
 ) -> list[Dataset]:
     dsets = []
-    for lang in LANGS:
+    for lang in langs:
         dset: Dataset = load_dataset(
             name,
             f"{language_prefix}{lang}",
@@ -65,22 +67,26 @@ def save_only_lines(
     return dsets
 
 
-def get_wiki_dataset(cache_dir: Path, content_column: str) -> Dataset:
-    dsets = get_hub_datasets("wikipedia", "20220301.", cache_dir)
+def get_wiki_dataset(cache_dir: Path, langs: list[str], content_column: str) -> Dataset:
+    dsets = get_hub_datasets("wikipedia", "20220301.", cache_dir, langs)
     return concat_datasets(dsets, "text", content_column)
 
 
 def get_allenAI_c4_dataset(
-    cache_dir: Path, content_column: str, batch_size: int, c4_sizes: list[int]
+    cache_dir: Path,
+    langs: list[str],
+    content_column: str,
+    batch_size: int,
+    c4_sizes: list[int],
 ) -> Dataset:
     streaming = True
     save_only = c4_sizes
     c4_dir = cache_dir / "my_c4"
-    drive_dirs = [c4_dir / lang for lang in LANGS]
+    drive_dirs = [c4_dir / lang for lang in langs]
     dsets: list[Dataset] = []
 
     if not all([dir.exists() for dir in drive_dirs]):
-        i_dsets: list[IterableDataset] = get_hub_datasets("allenai/c4", "", cache_dir, streaming)  # type: ignore
+        i_dsets: list[IterableDataset] = get_hub_datasets("allenai/c4", "", cache_dir, langs, streaming)  # type: ignore
         dsets = save_only_lines(i_dsets, save_only, batch_size, drive_dirs)
     else:
         dsets = [load_batched_dataset(dir) for dir in drive_dirs]
@@ -93,14 +99,23 @@ def get_allenAI_c4_dataset(
 
 
 def get_CC_mined_dataset(
-    cc_mined_dir: Path, cache_dir: Path, content_column: str
+    cc_mined_dir: Path,
+    cache_dir: Path,
+    langs: list[str],
+    content_column: str,
 ) -> Dataset:
-    dset: Dataset = load_dataset(
-        "csv",
-        data_dir=str(cc_mined_dir),
-        split="train",
-        cache_dir=str(cache_dir),
-    )  # type: ignore
+    dsets = []
+    for lang in langs:
+        dir = cc_mined_dir / lang
+        lset: Dataset = load_dataset(
+            "csv",
+            data_dir=str(dir),
+            split="train",
+            cache_dir=str(cache_dir),
+        )  # type: ignore
+        dsets.append(lset)
+
+    dset = concatenate_datasets(dsets)
     dset = dset.remove_columns(
         [col for col in dset.column_names if col != content_column]
     )
@@ -108,13 +123,14 @@ def get_CC_mined_dataset(
 
 
 def prepare_dataset(
-    dataset_extractors: list[Callable[[Path, str], Dataset]],
+    dataset_extractors: list[Extractor],
     cache_dir: Path,
+    langs: list[str],
     content_column: str,
 ) -> Dataset:
     dsets = []
     for extractor in dataset_extractors:
-        dataset = extractor(cache_dir, content_column)
+        dataset = extractor(cache_dir, langs, content_column)
         dsets.append(dataset)
     return concatenate_datasets(dsets)
 
@@ -124,17 +140,18 @@ def execute(
     cache_dir: Path,
     content_column: str,
     batch_size: int,
+    langs: list[str],
     c4_size: list[int],
 ) -> Dataset:
-    cc_mined = lambda c_dir, content_col: get_CC_mined_dataset(
-        cc_mined_dir, c_dir, content_col
+    cc_mined = lambda c_dir, langs, content_col: get_CC_mined_dataset(
+        cc_mined_dir, c_dir, langs, content_col
     )
-    allen_c4 = lambda c_dir, content_col: get_allenAI_c4_dataset(
-        c_dir, content_col, batch_size, c4_size
+    allen_c4 = lambda c_dir, langs, content_col: get_allenAI_c4_dataset(
+        c_dir, langs, content_col, batch_size, c4_size
     )
-    dataset_extractors: list[Callable[[Path, str], Dataset]] = [
+    dataset_extractors: list[Extractor] = [
         get_wiki_dataset,
         allen_c4,
         cc_mined,
     ]
-    return prepare_dataset(dataset_extractors, cache_dir, content_column)
+    return prepare_dataset(dataset_extractors, cache_dir, langs, content_column)
