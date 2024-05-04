@@ -38,6 +38,8 @@ def train_tokenizer(
 
 
 def save_tokenizer(tokenizer: Tokenizer, save_dir: Path) -> None:
+    save_dir.mkdir(parents=True, exist_ok=True)
+
     tokenizer_path = save_dir / "tokenizer.json"
 
     model: models.Model = tokenizer.model
