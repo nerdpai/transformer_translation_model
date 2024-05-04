@@ -1,22 +1,22 @@
-import prepare_place
-import prepare_dataset
-import prepare_tokenizer
-import prepare_trainer
+import preparations.dataset as prep_dataset
+import preparations.place as prep_place
+import preparations.tokenizer as prep_tokenizer
+import preparations.trainer as prep_trainer
 import train_tokenizer
 import changeable as ch
 
 
 if __name__ == "__main__":
-    contin = prepare_place.execute(ch.save_tokenizer_dir)
+    contin = prep_place.execute(ch.save_tokenizer_dir)
     if contin:
-        tokenizer = prepare_tokenizer.execute(
+        tokenizer = prep_tokenizer.execute(
             ch.BOS_TOKEN,
             ch.EOS_TOKEN,
             ch.NEW_LINE_TOKEN,
             ch.UNK_TOKEN,
             ch.special_tokens,
         )
-        dataset = prepare_dataset.execute(
+        dataset = prep_dataset.execute(
             ch.cc_mined_dir,
             ch.cache_dir,
             ch.CONTENT_COLUMN,
@@ -24,7 +24,7 @@ if __name__ == "__main__":
             ch.langs,
             ch.c4_sizes,
         )
-        trainer = prepare_trainer.execute(
+        trainer = prep_trainer.execute(
             ch.VOCAB_SIZE, ch.special_tokens, ch.MIN_FREQUENCY, ch.MAX_TOKEN_LENGTH
         )
         train_tokenizer.execute(
