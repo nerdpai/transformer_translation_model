@@ -1,0 +1,4 @@
+vocab: [en, de, fr]; ~34M rows {10M c4;}
+en_vocab: [en]; ~47M rows {32M c4; 6.4M wikipedia; 8.6M mined}
+de_vocab: [de]; ~29M rows; {25M c4; 2.6M wikipedia; 1.5M mined;}
+fr_vocab: [fr]; ~29M rows; {25M c4; 2.4M wikipedia; 1.2M mined;}
