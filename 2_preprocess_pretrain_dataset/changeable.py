@@ -12,4 +12,4 @@ csv_directory: Path = Path(
     # elsewhere
 )
 
-TARGET_SIZE_OF_CSV_IN_MB = 30
+TARGET_SIZE_OF_CSV_IN_MB: int = 30
