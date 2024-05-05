@@ -4,3 +4,9 @@ xxhash>=3.4.1
 tokenizers>=0.19.1
 scipy>=1.13.0
 datasets>=2.19.0
+transformers
+numpy
+tensorflow
+keras
+scikit-learn
+h5py

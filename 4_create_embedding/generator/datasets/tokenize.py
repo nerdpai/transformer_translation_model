@@ -1,0 +1,43 @@
+import shutil
+import datasets
+from tokenizers import Tokenizer
+from transformers import PreTrainedTokenizerFast
+from pathlib import Path
+
+
+def tokenize_dataset(
+    dataset: datasets.Dataset,
+    tokenizer: Tokenizer,
+    cache_dir: Path,
+    column_with_sequence: str,
+    batch_size: int = 0,
+    tokenized_column_name: str = "",
+) -> None:
+
+    if cache_dir.exists():
+        create_dir = input(
+            "Dataset already tokenized. Do you want to rewrite it? (y/n): "
+        )
+        if create_dir.lower() != "y":
+            print("Stopping tokenization.")
+            return
+        shutil.rmtree(cache_dir)
+
+    cache_dir.mkdir(parents=True, exist_ok=True)
+
+    if batch_size <= 0:
+        batch_size = len(dataset)
+    if tokenized_column_name == "":
+        tokenized_column_name = column_with_sequence
+
+    for i in range(0, len(dataset), batch_size):
+        data = dataset[i : i + batch_size]
+        texts: list[str] = data[column_with_sequence]
+
+        fast_tokenizer = PreTrainedTokenizerFast(tokenizer_object=tokenizer)
+        tokenized = fast_tokenizer(texts, add_special_tokens=True)["input_ids"]  # type: ignore
+
+        dset: datasets.Dataset = datasets.Dataset.from_dict(
+            {tokenized_column_name: tokenized}
+        )
+        dset.save_to_disk(str(cache_dir / f"{i}.data"))
