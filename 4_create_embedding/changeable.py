@@ -9,8 +9,8 @@ from generator.skip_grams_gen import SkipGenSpecs
 SEED: int = 42
 
 ## hidden
-_DATASET_NUM_OF_LINES: int = 5 * 10**7
-_PARTS_NUM: int = _DATASET_NUM_OF_LINES // 10**5
+__DATASET_NUM_OF_LINES: int = 5 * 10**7
+__PARTS_NUM: int = __DATASET_NUM_OF_LINES // 10**5
 
 
 ## tokenizer
@@ -40,8 +40,8 @@ generator_cache_dir = Path(str(dataset_cache_dir / "generator"))
 TRAIN_BATCH_SIZE: int = 2**16
 WINDOW_SIZE: int = 2
 NUM_NEGATIVE_SAMPLES: int = 5
-PART_SIZE: int = _DATASET_NUM_OF_LINES // _PARTS_NUM
-PARTS_PER_EPOCH: int = int(0.1 * _PARTS_NUM)
+PART_SIZE: int = __DATASET_NUM_OF_LINES // __PARTS_NUM
+PARTS_PER_EPOCH: int = int(0.1 * __PARTS_NUM)
 PART_INTERFERE: int = int(0.3 * PARTS_PER_EPOCH)
 T: float = 10e-4
 
@@ -67,7 +67,7 @@ embedding_dir = Path(
     # elsewhere
 )
 
-EPOCS_NUM: int = int(3 * _PARTS_NUM / PARTS_PER_EPOCH)
+EPOCS_NUM: int = int(3 * __PARTS_NUM / PARTS_PER_EPOCH)
 
 EMBED_DIM: int = 512
 PAD_TOKEN: str = "<pad>"
