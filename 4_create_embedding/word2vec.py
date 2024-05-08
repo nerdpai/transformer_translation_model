@@ -1,21 +1,21 @@
+from pathlib import Path
 import numpy as np
 import tensorflow as tf
-from keras import layers
-
-EMBEDDING_LAYER_NAME = "w2v_embedding"
+from keras import layers, Sequential
 
 
 # code from here: "https://www.tensorflow.org/text/tutorials/word2vec"
 class Word2Vec(tf.keras.Model):
     def __init__(self, vocab_size: int, embedding_dim: int):
         super(Word2Vec, self).__init__()
+        __NAME = "w2v"
 
         self.target_embedding = layers.Embedding(
-            vocab_size, embedding_dim, name=EMBEDDING_LAYER_NAME
+            vocab_size, embedding_dim, name=f"{__NAME}_emb"
         )
 
         self.context_embedding = layers.Embedding(
-            vocab_size, embedding_dim, name="w2v_context"
+            vocab_size, embedding_dim, name=f"{__NAME}_context"
         )
 
     def call(self, inputs, training=None, mask=None):
@@ -36,3 +36,9 @@ class Word2Vec(tf.keras.Model):
         weights: np.ndarray = self.target_embedding.get_weights()[0]
         weights[index_of_pad] = np.zeros(weights.shape[1])
         self.target_embedding.set_weights([weights])
+
+    def save_embedding(self, output_path: Path) -> None:
+        output_path.mkdir(parents=True, exist_ok=True)
+
+        embedding_model = Sequential([self.target_embedding])
+        embedding_model.save(str(output_path / "model.h5"))

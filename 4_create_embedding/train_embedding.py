@@ -1,10 +1,13 @@
-from tensorflow.keras import Model
-from keras import optimizers, metrics, losses, utils, Sequential
+from keras.callbacks import EarlyStopping
+from keras import optimizers, metrics, losses, utils
 from tokenizers import Tokenizer
 from pathlib import Path
+from typing import Tuple
+
 
 import generator.skip_grams_gen as gen
-from word2vec import Word2Vec, EMBEDDING_LAYER_NAME
+from word2vec import Word2Vec
+from preparations.callbacks import History, RangedDecay
 
 
 def train_word2vec(
@@ -12,30 +15,22 @@ def train_word2vec(
     vocab_size: int,
     embedding_dim: int,
     epochs_num: int,
-    learning_rate: float,
     tokenizer: Tokenizer,
     pad_token: str,
-) -> Model:
+    callbacks: Tuple[History, RangedDecay, EarlyStopping],
+) -> Tuple[Word2Vec, History]:
+    history, decay, early_stop = callbacks
+
     word2vec_model: Word2Vec = Word2Vec(vocab_size, embedding_dim)  # type: ignore
     word2vec_model.compile(
-        optimizer=optimizers.Adam(learning_rate=learning_rate),
+        optimizer=optimizers.Adam(learning_rate=decay),  # type: ignore
         loss=losses.CategoricalCrossentropy(from_logits=True),
         metrics=metrics.CategoricalAccuracy(),
     )
 
-    word2vec_model.fit(generator, epochs=epochs_num)  # type: ignore
+    word2vec_model.fit(generator, epochs=epochs_num, callbacks=[history, early_stop])  # type: ignore
     word2vec_model.zero_padding(tokenizer.token_to_id(pad_token))
-    return word2vec_model
-
-
-def save_embedding(model: Model, output_path: Path) -> None:
-    output_path.mkdir(parents=True, exist_ok=True)
-
-    for layer in model.layers:
-        if layer.name == EMBEDDING_LAYER_NAME:
-            embedding_model = Sequential([layer])
-            embedding_model.save(str(output_path / "model.h5"))
-            break
+    return word2vec_model, history
 
 
 def execute(
@@ -43,18 +38,19 @@ def execute(
     tokenizer: Tokenizer,
     embedding_dim: int,
     epochs_num: int,
-    learning_rate: float,
     output_path: Path,
     pad_token: str,
+    callbacks: Tuple[History, RangedDecay, EarlyStopping],
 ) -> None:
 
-    model = train_word2vec(
+    model, history = train_word2vec(
         generator,
         tokenizer.get_vocab_size(),
         embedding_dim,
         epochs_num,
-        learning_rate,
         tokenizer,
         pad_token,
+        callbacks,
     )
-    save_embedding(model, output_path)
+    model.save_embedding(output_path)
+    history.save_history(output_path)

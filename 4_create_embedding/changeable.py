@@ -70,5 +70,10 @@ embedding_dir = Path(
 EPOCS_NUM: int = int(3 * _PARTS_NUM / PARTS_PER_EPOCH)
 
 EMBED_DIM: int = 512
-LEARNING_RATE: float = 10e-4
 PAD_TOKEN: str = "<pad>"
+
+
+## callbacks
+INIT_LR: float = 10e-3
+FINAL_LR: float = 10e-5
+EPOCH_PATIENT: int = max(10, int(0.1 * EPOCS_NUM))
