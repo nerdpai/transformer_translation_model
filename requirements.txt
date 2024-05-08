@@ -6,7 +6,8 @@ scipy>=1.13.0
 datasets>=2.19.0
 transformers
 numpy
-tensorflow
+tensorflow==2.13
 keras
 scikit-learn
 h5py
+matplotlib
