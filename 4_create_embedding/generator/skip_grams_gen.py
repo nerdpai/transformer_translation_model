@@ -1,5 +1,4 @@
 from keras.utils import Sequence
-import tensorflow as tf
 import math
 from pathlib import Path
 import datasets
