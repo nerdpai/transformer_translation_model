@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 from pathlib import Path
 from keras.callbacks import Callback, EarlyStopping
-from keras.optimizers.schedules.learning_rate_schedule import LearningRateSchedule
+from tensorflow.keras.optimizers.schedules import LearningRateSchedule  # type: ignore
 from typing import Tuple
 
 
