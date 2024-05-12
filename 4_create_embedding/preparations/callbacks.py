@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 from pathlib import Path
 from keras.callbacks import Callback, EarlyStopping
+import tensorflow as tf
 from tensorflow.keras.optimizers.schedules import LearningRateSchedule  # type: ignore
 from typing import Tuple
 
@@ -55,11 +56,11 @@ class History(Callback):
 class RangedDecay(LearningRateSchedule):
     def __init__(self, initial_lr: float, final_lr: float, epochs_num: int):
         super().__init__()
-        self.initial_lr = initial_lr
-        self.decay = (initial_lr - final_lr) / epochs_num
+        self.initial_lr: float = initial_lr
+        self.decay: float = (initial_lr - final_lr) / epochs_num
 
     def __call__(self, step):
-        return self.initial_lr - self.decay * step
+        return self.initial_lr - self.decay * tf.cast(step, tf.float32)
 
 
 def execute(
