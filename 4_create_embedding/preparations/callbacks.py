@@ -54,22 +54,31 @@ class History(Callback):
 
 
 class RangedDecay(LearningRateSchedule):
-    def __init__(self, initial_lr: float, final_lr: float, epochs_num: int):
+    def __init__(self, initial_lr: float, final_lr: float, steps_num: int):
         super().__init__()
         self.initial_lr: float = initial_lr
-        self.decay: float = (initial_lr - final_lr) / epochs_num
+        self.decay: float = (initial_lr - final_lr) / steps_num
+        self.final_lr: float = final_lr
 
     def __call__(self, step):
-        return self.initial_lr - self.decay * tf.cast(step, tf.float32)
+        lr = self.initial_lr - self.decay * tf.cast(step, tf.float32)
+        return tf.maximum(lr, tf.constant(self.final_lr, dtype=tf.float32))
 
 
 def execute(
     init_lr: float,
     final_lr: float,
     epochs_num: int,
+    parts_per_epoch: int,
+    part_size: int,
+    samples_per_line: int,
+    train_batch_size: int,
     patience_for_epoch: int,
 ) -> Tuple[History, RangedDecay, EarlyStopping]:
     history = History()
-    decay = RangedDecay(init_lr, final_lr, epochs_num)
+    steps_num: int = (
+        epochs_num * parts_per_epoch * part_size * samples_per_line // train_batch_size
+    )
+    decay = RangedDecay(init_lr, final_lr, steps_num)
     early_stopping = EarlyStopping(monitor="loss", patience=patience_for_epoch)
     return history, decay, early_stopping

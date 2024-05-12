@@ -10,7 +10,8 @@ SEED: int = 42
 
 ## hidden
 __DATASET_NUM_OF_LINES: int = 5 * 10**7
-__PARTS_NUM: int = __DATASET_NUM_OF_LINES // 10**5
+__PARTS_NUM: int = __DATASET_NUM_OF_LINES // 10**3
+SAMPLES_PER_LINE_: int = 1500
 
 
 ## tokenizer
@@ -27,10 +28,10 @@ dataset_cache_dir = Path(
     # elsewhere
 )
 
-DATASET_BATCH_SIZE: int = 5 * 10**5
+DATASET_BATCH_SIZE: int = 10**4
 CONTENT_COLUMN: str = "raw_content"
 
-c4_sizes: list[int] = [10**7, 5 * 10**6, 5 * 10**6]
+c4_sizes: list[int] = [13 * 10**6, 7 * 10**6, 7 * 10**6]
 langs: list[str] = ["en", "de", "fr"]
 
 
@@ -41,7 +42,7 @@ TRAIN_BATCH_SIZE: int = 2**16
 WINDOW_SIZE: int = 2
 NUM_NEGATIVE_SAMPLES: int = 5
 PART_SIZE: int = __DATASET_NUM_OF_LINES // __PARTS_NUM
-PARTS_PER_EPOCH: int = int(0.1 * __PARTS_NUM)
+PARTS_PER_EPOCH: int = int(2 * 10**-3 * __PARTS_NUM)
 PART_INTERFERE: int = int(0.3 * PARTS_PER_EPOCH)
 T: float = 10e-4
 
@@ -66,8 +67,9 @@ get_skip_gen_specs: Callable[[Dataset, Tokenizer], SkipGenSpecs] = (
 embedding_dir = Path(
     # elsewhere
 )
+__TRAINING_LOOPS_NUM: int = 2
 
-EPOCS_NUM: int = int(3 * __PARTS_NUM / PARTS_PER_EPOCH)
+EPOCS_NUM: int = int(__TRAINING_LOOPS_NUM * __PARTS_NUM / PARTS_PER_EPOCH)
 
 EMBED_DIM: int = 512
 PAD_TOKEN: str = "<pad>"
@@ -75,5 +77,5 @@ PAD_TOKEN: str = "<pad>"
 
 ## callbacks
 INIT_LR: float = 10e-3
-FINAL_LR: float = 10e-5
-EPOCH_PATIENT: int = max(10, int(0.1 * EPOCS_NUM))
+FINAL_LR: float = 10e-6
+EPOCH_PATIENT: int = max(10, int(0.1 * EPOCS_NUM / __TRAINING_LOOPS_NUM))

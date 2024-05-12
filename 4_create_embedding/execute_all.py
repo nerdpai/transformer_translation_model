@@ -26,7 +26,14 @@ def train():
     generator = prep_gen.execute(generator_specs)
 
     callbacks = prep_callbacks.execute(
-        ch.INIT_LR, ch.FINAL_LR, ch.EPOCS_NUM, ch.EPOCH_PATIENT
+        ch.INIT_LR,
+        ch.FINAL_LR,
+        ch.EPOCS_NUM,
+        ch.PARTS_PER_EPOCH,
+        ch.PART_SIZE,
+        ch.SAMPLES_PER_LINE_,
+        ch.TRAIN_BATCH_SIZE,
+        ch.EPOCH_PATIENT,
     )
 
     train_embedding.execute(
