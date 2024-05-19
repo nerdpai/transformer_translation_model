@@ -1,8 +1,15 @@
 import shutil
 import datasets
+import pandas as pd
 from tokenizers import Tokenizer
 from transformers import PreTrainedTokenizerFast
 from pathlib import Path
+
+
+def __nan_remove(texts: list[str]) -> list[str]:
+    df = pd.DataFrame(texts, columns=["data"])
+    df = df[df["data"].notna()]
+    return df["data"].tolist()
 
 
 def tokenize_dataset(
@@ -33,6 +40,10 @@ def tokenize_dataset(
     for i in range(0, len(dataset), batch_size):
         data = dataset[i : i + batch_size]
         texts: list[str] = data[column_with_sequence]
+
+        texts = __nan_remove(texts)
+        if len(texts) == 0:
+            continue
 
         fast_tokenizer = PreTrainedTokenizerFast(tokenizer_object=tokenizer)
         tokenized = fast_tokenizer(texts, add_special_tokens=True)["input_ids"]  # type: ignore

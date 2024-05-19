@@ -9,15 +9,19 @@ from tokenizers import (
 )
 
 
+def __nan_remove(texts: list[str]) -> list[str]:
+    df = pd.DataFrame(texts, columns=["data"])
+    df = df[df["data"].notna()]
+    return df["data"].tolist()
+
+
 def data_generator(
     dataset: datasets.Dataset, batch_size: int, content_column: str
 ) -> typing.Iterator[list[str]]:
     for i in range(0, len(dataset), batch_size):
         content: typing.List[str] = dataset[i : i + batch_size][content_column]
 
-        df = pd.DataFrame(content, columns=["data"])
-        df = df[df["data"].notna()]
-        content = df["data"].tolist()
+        content = __nan_remove(content)
 
         yield content
 
