@@ -15,9 +15,9 @@ def data_generator(
     for i in range(0, len(dataset), batch_size):
         content: typing.List[str] = dataset[i : i + batch_size][content_column]
 
-        # df = pd.DataFrame(content, columns=["data"])
-        # df = df[df["data"].notna()]
-        # content = df["data"].tolist()
+        df = pd.DataFrame(content, columns=["data"])
+        df = df[df["data"].notna()]
+        content = df["data"].tolist()
 
         yield content
 
