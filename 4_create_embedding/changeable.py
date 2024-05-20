@@ -45,6 +45,7 @@ PART_SIZE: int = __DATASET_NUM_OF_LINES // __PARTS_NUM
 PARTS_PER_EPOCH: int = int(2 * 10**-3 * __PARTS_NUM)
 PART_INTERFERE: int = int(0.3 * PARTS_PER_EPOCH)
 T: float = 10e-4
+SHUFFLE: bool = True
 
 get_skip_gen_specs: Callable[[Dataset, Tokenizer], SkipGenSpecs] = (
     lambda dataset, tokenizer: SkipGenSpecs(
@@ -59,6 +60,7 @@ get_skip_gen_specs: Callable[[Dataset, Tokenizer], SkipGenSpecs] = (
         parts_per_epoch=PARTS_PER_EPOCH,
         part_interfere=PART_INTERFERE,
         t=T,
+        shuffle=SHUFFLE,
     )
 )
 

@@ -27,6 +27,7 @@ class SkipGenSpecs:
         parts_per_epoch: int = 10,
         part_interfere: int = 3,
         t: float = 10e-4,
+        shuffle: bool = True,
     ) -> None:
         self.dataset = dataset
         self.column_with_text = column_with_text
@@ -39,6 +40,7 @@ class SkipGenSpecs:
         self.parts_per_epoch = parts_per_epoch
         self.t = t
         self.part_interfere = part_interfere
+        self.shuffle = shuffle
 
 
 class SkipGramsGenerator(Sequence):
@@ -60,6 +62,7 @@ class SkipGramsGenerator(Sequence):
         self.parts_per_epoch = specs.parts_per_epoch
         self.t = specs.t
         self.part_interfere = specs.part_interfere
+        self.shuffle = specs.shuffle
 
         self.tokenized = specs.cache_dir / "tokenized"
         self.skipped = specs.cache_dir / "skipped.h5"
@@ -137,9 +140,11 @@ class SkipGramsGenerator(Sequence):
             start,
             end,
         )
-        self.__shuffle_skip(
-            self.skipped, self.SKIPPED_COL_NAME, self.part_size, self.part_interfere
-        )
+
+        if self.shuffle:
+            self.__shuffle_skip(
+                self.skipped, self.SKIPPED_COL_NAME, self.part_size, self.part_interfere
+            )
 
         self.cur_part += self.parts_per_epoch
         if self.cur_part >= self.part_num:
