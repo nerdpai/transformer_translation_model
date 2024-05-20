@@ -106,7 +106,7 @@ class SkipGramsGenerator(Sequence):
             num_of_samples = dset.shape[0]
             self.cur_len = num_of_samples
 
-            step: int = int((part_interfere / part_size) * num_of_samples)
+            step: int = int((part_size / part_interfere) * num_of_samples)
             for i in tqdm(range(0, num_of_samples, step), desc="Shuffling"):
                 start = i
                 end = i + step
