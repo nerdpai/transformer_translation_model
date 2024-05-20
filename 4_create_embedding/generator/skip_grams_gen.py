@@ -103,11 +103,13 @@ class SkipGramsGenerator(Sequence):
     ) -> None:
         with h5py.File(cached_skip, "a") as h5f:
             dset: h5py.Dataset = h5f[column_name]  # type: ignore
-            self.cur_len = dset.shape[0]
+            num_of_samples = dset.shape[0]
+            self.cur_len = num_of_samples
 
-            for i in tqdm(range(0, dset.shape[0], part_size), desc="Shuffling"):
+            step: int = int((part_interfere / part_size) * num_of_samples)
+            for i in tqdm(range(0, num_of_samples, step), desc="Shuffling"):
                 start = i
-                end = i + part_size * part_interfere
+                end = i + step
 
                 data: np.ndarray = dset[start:end]
                 np.random.shuffle(data)
