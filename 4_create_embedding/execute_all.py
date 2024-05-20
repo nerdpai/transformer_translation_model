@@ -4,11 +4,14 @@ import preparations.check_place as prep_check_place
 import preparations.dataset as prep_dataset
 import preparations.callbacks as prep_callbacks
 import preparations.set_random as prep_random
+import preparations.tf_config as prep_tf_config
 import train_embedding
 import changeable as ch
 
 
 def train():
+    prep_tf_config.execute()
+
     prep_random.execute(ch.SEED)
 
     tokenizer = prep_tokenizer.execute(tokenizer_path=ch.tokenizer_path)
