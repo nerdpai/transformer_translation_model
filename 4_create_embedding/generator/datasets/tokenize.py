@@ -4,6 +4,7 @@ import pandas as pd
 from tokenizers import Tokenizer
 from transformers import PreTrainedTokenizerFast
 from pathlib import Path
+from tqdm import tqdm
 
 
 def __nan_remove(texts: list[str]) -> list[str]:
@@ -37,7 +38,7 @@ def tokenize_dataset(
     if tokenized_column_name == "":
         tokenized_column_name = column_with_sequence
 
-    for i in range(0, len(dataset), batch_size):
+    for i in tqdm(range(0, len(dataset), batch_size), desc="Tokenization"):
         data = dataset[i : i + batch_size]
         texts: list[str] = data[column_with_sequence]
 

@@ -2,6 +2,7 @@ import h5py
 import datasets
 import numpy as np
 from pathlib import Path
+from tqdm import tqdm
 
 import generator.tables.skip_grams as skip_grams
 from generator.tables.sampling_tables import SamplingTables
@@ -48,7 +49,7 @@ def generate_skip_dataset(
         )
 
     with h5py.File(skip_dataset_path, "a") as h5f:
-        for i in range(start, end, batch_size):
+        for i in tqdm(range(start, end, batch_size), desc="Skip creation"):
             s = i
             e = i + batch_size
             e = min(e, end)

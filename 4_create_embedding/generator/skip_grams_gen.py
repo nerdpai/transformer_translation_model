@@ -5,6 +5,7 @@ import datasets
 import tokenizers
 import numpy as np
 import h5py
+from tqdm import tqdm
 
 import generator.tables.sampling_tables as st
 import generator.datasets.tokenize as td
@@ -104,7 +105,7 @@ class SkipGramsGenerator(Sequence):
             dset: h5py.Dataset = h5f[column_name]  # type: ignore
             self.cur_len = dset.shape[0]
 
-            for i in range(0, dset.shape[0], part_size):
+            for i in tqdm(range(0, dset.shape[0], part_size), desc="Shuffling"):
                 start = i
                 end = i + part_size * part_interfere
 

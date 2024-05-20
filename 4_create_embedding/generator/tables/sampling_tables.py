@@ -1,6 +1,7 @@
 import datasets
 import numpy as np
 import tensorflow as tf
+from tqdm import tqdm
 
 
 class SamplingTables:
@@ -17,7 +18,7 @@ def create_sampling_tables(
     t: float,
 ) -> SamplingTables:
     tokens_appearance = tf.zeros(vocab_size, dtype=tf.int64)
-    for i in range(0, len(dataset), batch_size):
+    for i in tqdm(range(0, len(dataset), batch_size), desc="Sample table creation"):
         batch = dataset[i : i + batch_size]
         tokens = np.concatenate(batch[column_with_seqiences], dtype=np.int32)
         tokens = tf.convert_to_tensor(tokens, dtype=tf.int32)
