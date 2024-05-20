@@ -6,6 +6,7 @@ import tokenizers
 import numpy as np
 import h5py
 from tqdm import tqdm
+import tensorflow as tf
 
 import generator.tables.sampling_tables as st
 import generator.datasets.tokenize as td
@@ -99,20 +100,22 @@ class SkipGramsGenerator(Sequence):
         return datasets.concatenate_datasets(dsets)
 
     def __shuffle_skip(
-        self, cached_skip: Path, column_name: str, part_size: int, part_interfere: int
+        self, cached_skip: Path, column_name: str, part_size: int, parts_interfere: int
     ) -> None:
         with h5py.File(cached_skip, "a") as h5f:
             dset: h5py.Dataset = h5f[column_name]  # type: ignore
             num_of_samples = dset.shape[0]
             self.cur_len = num_of_samples
 
-            step: int = int((part_size / part_interfere) * num_of_samples)
+            step: int = int((parts_interfere / self.parts_per_epoch) * num_of_samples)
             for i in tqdm(range(0, num_of_samples, step), desc="Shuffling"):
                 start = i
                 end = i + step
 
-                data: np.ndarray = dset[start:end]
-                np.random.shuffle(data)
+                data = np.array(dset[start:end], dtype=dset.dtype)
+                data_tensor: tf.Tensor = tf.convert_to_tensor(data, dtype=dset.dtype)
+                data_tensor = tf.random.shuffle(data_tensor)
+                data = data_tensor.numpy()
                 dset[start:end] = data
 
     def on_epoch_end(self):
