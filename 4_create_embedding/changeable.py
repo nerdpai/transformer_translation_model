@@ -10,7 +10,8 @@ SEED: int = 42
 
 ## hidden
 __DATASET_NUM_OF_LINES: int = 5 * 10**7
-__PARTS_NUM: int = __DATASET_NUM_OF_LINES // 10**3
+__EST_PART_SIZE = 10**3
+__PARTS_NUM: int = __DATASET_NUM_OF_LINES // __EST_PART_SIZE
 SAMPLES_PER_LINE_: int = 1500
 
 
@@ -79,5 +80,5 @@ PAD_TOKEN: str = "<pad>"
 
 ## callbacks
 INIT_LR: float = 10e-3
-FINAL_LR: float = 10e-6
+FINAL_LR: float = 10e-5
 EPOCH_PATIENT: int = max(10, int(0.1 * EPOCS_NUM / __TRAINING_LOOPS_NUM))
