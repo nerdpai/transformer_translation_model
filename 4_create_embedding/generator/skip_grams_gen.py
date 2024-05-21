@@ -103,12 +103,11 @@ class SkipGramsGenerator(Sequence):
         return datasets.concatenate_datasets(dsets)
 
     def __shuffle_skip(
-        self, cached_skip: Path, column_name: str, part_size: int, parts_interfere: int
+        self, cached_skip: Path, column_name: str, parts_interfere: int
     ) -> None:
         with h5py.File(cached_skip, "a") as h5f:
             dset: h5py.Dataset = h5f[column_name]  # type: ignore
             num_of_samples = dset.shape[0]
-            self.cur_len = num_of_samples
 
             step: int = int((parts_interfere / self.parts_per_epoch) * num_of_samples)
             for i in tqdm(range(0, num_of_samples, step), desc="Shuffling"):
@@ -120,6 +119,11 @@ class SkipGramsGenerator(Sequence):
                 data_tensor = tf.random.shuffle(data_tensor)
                 data = data_tensor.numpy()
                 dset[start:end] = data
+
+    def __set_cur_len(self, cached_skip: Path, column_name: str) -> None:
+        with h5py.File(cached_skip, "r") as h5f:
+            dset: h5py.Dataset = h5f[column_name]  # type: ignore
+            self.cur_len = dset.shape[0]
 
     def on_epoch_end(self):
         start = self.cur_part * self.part_size
@@ -141,10 +145,10 @@ class SkipGramsGenerator(Sequence):
             end,
         )
 
+        self.__set_cur_len(self.skipped, self.SKIPPED_COL_NAME)
+
         if self.shuffle:
-            self.__shuffle_skip(
-                self.skipped, self.SKIPPED_COL_NAME, self.part_size, self.part_interfere
-            )
+            self.__shuffle_skip(self.skipped, self.SKIPPED_COL_NAME, self.part_size)
 
         self.cur_part += self.parts_per_epoch
         if self.cur_part >= self.part_num:
