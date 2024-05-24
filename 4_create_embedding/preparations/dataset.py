@@ -5,7 +5,7 @@ from datasets import (
     load_from_disk,
     IterableDataset,
 )
-from typing import Callable, TypeAlias
+from typing import Callable, TypeAlias, Union
 from pathlib import Path
 
 
@@ -142,6 +142,7 @@ def execute(
     batch_size: int,
     langs: list[str],
     c4_size: list[int],
+    shuffle: Union[None, int] = None,
 ) -> Dataset:
     cc_mined = lambda c_dir, langs, content_col: get_CC_mined_dataset(
         cc_mined_dir, c_dir, langs, content_col
@@ -154,4 +155,9 @@ def execute(
         allen_c4,
         cc_mined,
     ]
-    return prepare_dataset(dataset_extractors, cache_dir, langs, content_column)
+
+    dset = prepare_dataset(dataset_extractors, cache_dir, langs, content_column)
+    if shuffle is not None:
+        dset = dset.shuffle()
+        dset = dset.flatten_indices()
+    return dset
