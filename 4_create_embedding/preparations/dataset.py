@@ -5,7 +5,7 @@ from datasets import (
     load_from_disk,
     IterableDataset,
 )
-from typing import Callable, TypeAlias, Union
+from typing import Callable, TypeAlias, Optional
 from pathlib import Path
 
 
@@ -142,7 +142,7 @@ def execute(
     batch_size: int,
     langs: list[str],
     c4_size: list[int],
-    seed: Union[None, int] = None,
+    seed: Optional[int] = None,
 ) -> Dataset:
     cc_mined = lambda c_dir, langs, content_col: get_CC_mined_dataset(
         cc_mined_dir, c_dir, langs, content_col
