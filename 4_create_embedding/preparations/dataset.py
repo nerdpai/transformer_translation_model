@@ -142,7 +142,7 @@ def execute(
     batch_size: int,
     langs: list[str],
     c4_size: list[int],
-    shuffle: Union[None, int] = None,
+    seed: Union[None, int] = None,
 ) -> Dataset:
     cc_mined = lambda c_dir, langs, content_col: get_CC_mined_dataset(
         cc_mined_dir, c_dir, langs, content_col
@@ -157,7 +157,7 @@ def execute(
     ]
 
     dset = prepare_dataset(dataset_extractors, cache_dir, langs, content_column)
-    if shuffle is not None:
-        dset = dset.shuffle()
+    if seed is not None:
+        dset = dset.shuffle(seed=seed)
         dset = dset.flatten_indices()
     return dset

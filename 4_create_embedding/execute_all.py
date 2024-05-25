@@ -23,7 +23,7 @@ def train():
         content_column=ch.CONTENT_COLUMN,
         langs=ch.langs,
         cc_mined_dir=ch.cc_mined_dir,
-        shuffle=ch.SEED,
+        seed=ch.SEED,
     )
 
     generator_specs = ch.get_skip_gen_specs(dataset, tokenizer)
