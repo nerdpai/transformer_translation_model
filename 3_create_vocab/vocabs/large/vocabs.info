@@ -1,4 +1,0 @@
-all: [en, de, fr]; ~33M rows; {10M c4; 11.4M wikipedia; 11.3M mined;}; max_len=25; min_freq=2; vocab_size=2^16;
-en: [en]; ~47M rows; {32M c4; 6.4M wikipedia; 8.6M mined;}; max_len=25; min_freq=2; vocab_size=2^16;
-de: [de]; ~29M rows; {25M c4; 2.6M wikipedia; 1.5M mined;}; max_len=25; min_freq=2; vocab_size=2^16;
-fr: [fr]; ~29M rows; {25M c4; 2.4M wikipedia; 1.2M mined;}; max_len=25; min_freq=2; vocab_size=2^16;
