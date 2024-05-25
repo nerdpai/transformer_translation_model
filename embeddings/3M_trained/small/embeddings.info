@@ -1,0 +1,1 @@
+en: [en]; ~3M rows {3M c4;}; dim=512; tokens=2^14 batch_size=2^16; learning_rate[10^-3 -> 10^-4]
