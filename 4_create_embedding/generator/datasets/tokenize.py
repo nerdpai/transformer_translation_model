@@ -13,6 +13,18 @@ def __nan_remove(texts: list[str]) -> list[str]:
     return df["data"].tolist()
 
 
+def __is_prepared(save_dir: Path) -> bool:
+    if save_dir.exists():
+        user_input = input(
+            "Dataset already tokenized. Do you want to rewrite it? (y/n) [n]: "
+        )
+        if user_input.lower() != "y":
+            print("Stopping tokenization.")
+            return True
+
+    return False
+
+
 def tokenize_dataset(
     dataset: datasets.Dataset,
     tokenizer: Tokenizer,
@@ -22,13 +34,10 @@ def tokenize_dataset(
     tokenized_column_name: str = "",
 ) -> None:
 
-    if cache_dir.exists():
-        create_dir = input(
-            "Dataset already tokenized. Do you want to rewrite it? (y/n): "
-        )
-        if create_dir.lower() != "y":
-            print("Stopping tokenization.")
-            return
+    is_place_good = __is_prepared(cache_dir)
+    if is_place_good:
+        return
+    else:
         shutil.rmtree(cache_dir)
 
     cache_dir.mkdir(parents=True, exist_ok=True)

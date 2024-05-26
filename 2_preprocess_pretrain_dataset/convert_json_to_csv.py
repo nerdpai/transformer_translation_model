@@ -54,16 +54,25 @@ def json_to_csv(
                 write_header = False
 
 
-def execute(json_files: list[Path], csv_directory: Path, each_csv_mb: int) -> None:
-    if csv_directory.is_dir():
+def __is_prepared(save_dir: Path) -> bool:
+    if save_dir.exists():
         user_input = input(
-            "The directory already exists. Do you want to delete it and its contents? (y/n): "
+            "The directory already exists. Do you want to delete it and its contents? (y/n) [n]: "
         )
-        if user_input.lower() == "y":
-            shutil.rmtree(csv_directory)
-        else:
+        if user_input.lower() != "y":
             print("Early stopping.")
-            return
+            return True
+
+    return False
+
+
+def execute(json_files: list[Path], csv_directory: Path, each_csv_mb: int) -> None:
+    is_place_good = __is_prepared(csv_directory)
+    if is_place_good:
+        return
+    else:
+        shutil.rmtree(csv_directory)
+
     csv_directory.mkdir(parents=True, exist_ok=True)
 
     json_to_csv(json_files, csv_directory, each_csv_mb)
