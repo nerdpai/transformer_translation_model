@@ -38,6 +38,8 @@ def tokenize_dataset(
     if tokenized_column_name == "":
         tokenized_column_name = column_with_sequence
 
+    fast_tokenizer = PreTrainedTokenizerFast(tokenizer_object=tokenizer)
+
     for i in tqdm(range(0, len(dataset), batch_size), desc="Tokenization"):
         data = dataset[i : i + batch_size]
         texts: list[str] = data[column_with_sequence]
@@ -46,7 +48,6 @@ def tokenize_dataset(
         if len(texts) == 0:
             continue
 
-        fast_tokenizer = PreTrainedTokenizerFast(tokenizer_object=tokenizer)
         tokenized = fast_tokenizer(texts, add_special_tokens=True)["input_ids"]  # type: ignore
 
         dset: datasets.Dataset = datasets.Dataset.from_dict(
