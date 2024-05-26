@@ -157,13 +157,13 @@ class SkipGramsGenerator(Sequence):
     def __len__(self):
         return math.ceil(self.cur_len / self.batch_size)
 
-    def __getitem__(self, idx):
+    def __getitem__(self, index):
         """
         Returns: (targets, contexts), labels
         """
         with h5py.File(self.skipped, "r") as h5f:
             dset: h5py.Dataset = h5f[self.SKIPPED_COL_NAME]  # type: ignore
-            batch = dset[idx * self.batch_size : (idx + 1) * self.batch_size]
+            batch = dset[index * self.batch_size : (index + 1) * self.batch_size]
             target = batch[:, 0]
             context = batch[:, 1:]
             labels = np.repeat(
