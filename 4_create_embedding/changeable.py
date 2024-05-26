@@ -10,7 +10,7 @@ SEED: int = 42
 
 ## hidden
 __DATASET_NUM_OF_LINES: int = 5 * 10**7
-__EST_PART_SIZE = 10**3
+__EST_PART_SIZE: int = 10**3
 __PARTS_NUM: int = __DATASET_NUM_OF_LINES // __EST_PART_SIZE
 SAMPLES_PER_LINE_: int = 1500
 
