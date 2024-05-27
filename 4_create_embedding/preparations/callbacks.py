@@ -16,7 +16,7 @@ class History(Callback):
             "epoch_categorical_accuracy": [],
         }
 
-    def __log(self, logs, version: str):
+    def __log(self, logs: dict, version: str):
         self.batch_history[f"{version}_loss"].append(logs["loss"])
         self.batch_history[f"{version}_categorical_accuracy"].append(
             logs["categorical_accuracy"]
