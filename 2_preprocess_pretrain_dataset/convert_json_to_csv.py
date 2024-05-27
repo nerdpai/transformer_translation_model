@@ -71,7 +71,8 @@ def execute(json_files: list[Path], csv_directory: Path, each_csv_mb: int) -> No
     if is_place_good:
         return
     else:
-        shutil.rmtree(csv_directory)
+        if csv_directory.exists():
+            shutil.rmtree(csv_directory)
 
     csv_directory.mkdir(parents=True, exist_ok=True)
 

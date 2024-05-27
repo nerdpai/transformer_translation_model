@@ -38,7 +38,8 @@ def tokenize_dataset(
     if is_place_good:
         return
     else:
-        shutil.rmtree(cache_dir)
+        if cache_dir.exists():
+            shutil.rmtree(cache_dir)
 
     cache_dir.mkdir(parents=True, exist_ok=True)
 
