@@ -7,6 +7,8 @@ from tqdm import tqdm
 import generator.tables.skip_grams as skip_grams
 from generator.tables.sampling_tables import SamplingTables
 
+__DTYPE = np.int32
+
 
 def save_skip_sample(
     sequence: np.ndarray,
@@ -46,6 +48,7 @@ def generate_skip_dataset(
             compression=0,
             chunks=True,
             maxshape=(None, None),
+            dtype=__DTYPE,
         )
 
     with h5py.File(skip_dataset_path, "a") as h5f:
