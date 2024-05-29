@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+from matplotlib.axes import Axes
 from keras.callbacks import Callback
 from pathlib import Path
 
@@ -34,7 +35,9 @@ class History(Callback):
 
         for version in self.versions:
             name = version.capitalize()
-            fig, ax = plt.subplots(figsize=(12, 8), dpi=200)
+
+            ax: Axes
+            _, ax = plt.subplots(figsize=(12, 8), dpi=200)
             for key, values in self.batch_history.items():
                 if key.startswith(version):
                     label = key.replace(f"{version}_", "")
