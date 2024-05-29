@@ -25,7 +25,6 @@ def execute(comp_specs: list[CompareSpecs], analitics_dir: Path) -> None:
 
         ax: Axes
         _, ax = plt.subplots(figsize=(12, 7))
-        print(type(ax))
         bars = ax.bar(range(1, len(comp_specs) + 1), values, color=colors)
         ax.set_xlabel("Models")
         ax.set_ylabel(name_of_value)
