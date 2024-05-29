@@ -1,9 +1,11 @@
+import tensorflow as tf
 import matplotlib.pyplot as plt
 from pathlib import Path
-from keras.callbacks import Callback, EarlyStopping
-import tensorflow as tf
-from tensorflow.keras.optimizers.schedules import LearningRateSchedule  # type: ignore
 from typing import Tuple
+from matplotlib.axes import Axes
+from matplotlib.figure import Figure
+from keras.callbacks import Callback, EarlyStopping
+from tensorflow.keras.optimizers.schedules import LearningRateSchedule  # type: ignore
 
 
 class History(Callback):
@@ -32,6 +34,9 @@ class History(Callback):
         output_path.mkdir(parents=True, exist_ok=True)
 
         for version in ["batch", "epoch"]:
+            fig: Figure
+            ax1: Axes
+
             fig, ax1 = plt.subplots()
 
             color = "red"
@@ -40,7 +45,7 @@ class History(Callback):
             ax1.plot(self.batch_history[f"{version}_loss"], color=color)
             ax1.tick_params(axis="y", labelcolor=color)
 
-            ax2 = ax1.twinx()
+            ax2: Axes = ax1.twinx()  # type: ignore
 
             color = "green"
             ax2.set_ylabel("accuracy", color=color)
