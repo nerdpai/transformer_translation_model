@@ -37,7 +37,7 @@ TRAIN_SPECS = prepare_specs(
 )
 
 
-## dataset
+## generator
 cache_dir = Path(
     # elsewhere
 )
