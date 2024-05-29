@@ -1,0 +1,30 @@
+scores - values in the scale from 1000 to 0
+window_size = 8
+#larger the accuracy the better
+#larger the score the better
+#scores is just scaled version of other columns
+
+model          binary_accuracy    bool_accuracy    accuracy    binary_scores    bool_scores    scores
+3m_small_en          763              906            834            806             916          861
+5m_small_en          738              889            814            779             899          839
+5m_small_de          764              915            840            807             925          866
+5m_small_fr          858              929            894            906             939          922
+mean_5m_small_lan    787              911            849            831             921          876
+5m_small_all         931              956            944            983             967          975
+5m_small_all_fair    836              944            890            883             954          918
+mean_5m_small_all    884              950            917            933             961          947
+mean_5m_small        825              927            876            871             937          904
+5m_large_en          717              960            838            757             971          864
+5m_large_de          760              954            857            803             965          884
+5m_large_fr          812              936            874            857             946          902
+mean_5m_large_lan    763              950            856            806             961          884
+5m_large_all         947              989            968            1000            1000         1000 
+5m_large_all_fair    850              985            918            898             996          947
+mean_5m_large_all    899              987            943            949             998          974 
+mean_5m_large        817              965            891            863             976          920
+
+conclusions (consideting score):
+1. 5m_small_all_fair > mean_5m_small_lan && 5m_large_all_fair > mean_5m_large_lan => 
+    hence, embedding that consists of all languages is better then specific for the language.
+2. the small and large models perform similar (mean_5m_large ~= mean_5m_small) with a little advantage of large models (mean_5m_large_all > mean_5m_large_all)
+3. winner: 5m_large_all
