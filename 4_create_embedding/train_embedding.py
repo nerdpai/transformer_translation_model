@@ -1,5 +1,4 @@
-from keras.callbacks import EarlyStopping
-from keras import optimizers, metrics, losses, utils
+from tensorflow._api.v2.v2 import keras
 from tokenizers import Tokenizer
 from pathlib import Path
 
@@ -10,21 +9,21 @@ from preparations.callbacks import History, RangedDecay
 
 
 def train_word2vec(
-    generator: utils.Sequence,
+    generator: keras.utils.Sequence,
     vocab_size: int,
     embedding_dim: int,
     epochs_num: int,
     tokenizer: Tokenizer,
     pad_token: str,
-    callbacks: tuple[History, RangedDecay, EarlyStopping],
+    callbacks: tuple[History, RangedDecay, keras.callbacks.EarlyStopping],
 ) -> tuple[Word2Vec, History]:
     history, decay, early_stop = callbacks
 
     word2vec_model: Word2Vec = Word2Vec(vocab_size, embedding_dim)  # type: ignore
     word2vec_model.compile(
-        optimizer=optimizers.Adam(learning_rate=decay),  # type: ignore
-        loss=losses.CategoricalCrossentropy(from_logits=True),
-        metrics=metrics.CategoricalAccuracy(),
+        optimizer=keras.optimizers.Adam(learning_rate=decay),  # type: ignore
+        loss=keras.losses.CategoricalCrossentropy(from_logits=True),
+        metrics=keras.metrics.CategoricalAccuracy(),
     )
 
     word2vec_model.fit(generator, epochs=epochs_num, callbacks=[history, early_stop])  # type: ignore
@@ -39,7 +38,7 @@ def execute(
     epochs_num: int,
     output_path: Path,
     pad_token: str,
-    callbacks: tuple[History, RangedDecay, EarlyStopping],
+    callbacks: tuple[History, RangedDecay, keras.callbacks.EarlyStopping],
 ) -> None:
 
     model, history = train_word2vec(
