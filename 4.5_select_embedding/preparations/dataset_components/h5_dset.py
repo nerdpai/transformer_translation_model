@@ -1,6 +1,6 @@
 import h5py
 import numpy as np
-import tensorflow as tf
+import tensorflow._api.v2.v2 as tf
 from pathlib import Path
 from tqdm import tqdm
 
@@ -23,7 +23,7 @@ class H5Dset:
                 data = np.array(dset[start:end], dtype=dset.dtype)
                 data_tensor: tf.Tensor = tf.convert_to_tensor(data, dtype=dset.dtype)
                 data_tensor = tf.random.shuffle(data_tensor)
-                data = data_tensor.numpy()
+                data = data_tensor.numpy()  # type: ignore
                 dset[start:end] = data
 
     def get_batch(self, start: int, end: int) -> np.ndarray:

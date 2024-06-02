@@ -37,7 +37,7 @@ def __get_emb_name(emb_lang_dir: Path) -> str:
 
 
 def __prepare_specs_in_subdir(
-    dir: Path,
+    directory: Path,
     emb_file_name: str,
     langs: list[str],
     universal_name: str,
@@ -46,7 +46,7 @@ def __prepare_specs_in_subdir(
 ) -> list[EmbTrainSpecs]:
     specs: list[EmbTrainSpecs] = []
     spec_langs: list[str] = []
-    lang_pathes = [subdir for subdir in dir.iterdir() if subdir.is_dir()]
+    lang_pathes = [subdir for subdir in directory.iterdir() if subdir.is_dir()]
     for lang_path in lang_pathes:
         lang = lang_path.name
 

@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Tuple, Optional, Callable
+from typing import Optional, Callable
 from datasets import Dataset
 from tokenizers import Tokenizer
 
@@ -50,7 +50,7 @@ class GeneratorSpecs:
 
 def execute(
     fetch_specs: FetcherSpecs, gen_specs: GeneratorSpecs
-) -> Tuple[NeighbourGenerator, NeighbourGenerator]:
+) -> tuple[NeighbourGenerator, NeighbourGenerator]:
     train_dset, test_dset = get_train_test(
         fetch_specs.cache_dir,
         fetch_specs.content_column,

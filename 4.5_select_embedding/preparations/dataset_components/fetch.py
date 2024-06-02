@@ -4,7 +4,7 @@ from datasets import (
     concatenate_datasets,
 )
 from pathlib import Path
-from typing import Tuple, Optional
+from typing import Optional
 
 
 def concat_datasets(
@@ -59,7 +59,7 @@ def get_train_test(
     content_column: str,
     langs: list[str],
     seed: Optional[int] = None,
-) -> Tuple[Dataset, Dataset]:
+) -> tuple[Dataset, Dataset]:
     paws = get_paws_datast(cache_dir, content_column, langs)
     lambada = get_lambada_dataset(cache_dir, content_column, langs)
 

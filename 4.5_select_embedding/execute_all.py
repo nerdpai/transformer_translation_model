@@ -1,5 +1,4 @@
-from tensorflow.keras import Model
-from typing import Tuple
+from tensorflow._api.v2.v2 import keras
 
 import preparations.compile_elements as prep_compilements
 import preparations.check_place as prep_check_place
@@ -39,7 +38,7 @@ def execute() -> None:
 
 def get_generators(
     train_spec: EmbTrainSpecs,
-) -> Tuple[NeighbourGenerator, NeighbourGenerator]:
+) -> tuple[NeighbourGenerator, NeighbourGenerator]:
     tokenizer = prep_tokenizer.execute(train_spec.tokenizer_path)
 
     fetch_specs = prep_dataset.FetcherSpecs(
@@ -64,7 +63,7 @@ def get_generators(
     return train_gen, test_gen
 
 
-def train(train_spec: EmbTrainSpecs, train_gen: NeighbourGenerator) -> Model:
+def train(train_spec: EmbTrainSpecs, train_gen: NeighbourGenerator) -> keras.Model:
 
     emb = prep_embedding.execute(train_spec.emb_path)
 

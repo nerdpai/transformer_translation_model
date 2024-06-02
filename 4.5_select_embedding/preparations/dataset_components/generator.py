@@ -1,13 +1,12 @@
 import math
 import numpy as np
-from keras.utils import Sequence
-from typing import Tuple
+from tensorflow._api.v2.v2 import keras
 
 
 from preparations.dataset_components.h5_dset import H5Dset
 
 
-class NeighbourGenerator(Sequence):
+class NeighbourGenerator(keras.utils.Sequence):
 
     def __init__(
         self,
@@ -28,7 +27,7 @@ class NeighbourGenerator(Sequence):
         self.__shuffle_batch = int(self.__len * self.shuffle_overlap)
         self.on_epoch_end()
 
-    def __prepare_to_train(self, batch: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
+    def __prepare_to_train(self, batch: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
         batch_size = len(batch)
         train = batch[:, 0]
         y = batch[:, 1:]

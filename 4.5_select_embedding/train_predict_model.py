@@ -1,6 +1,4 @@
-from tensorflow.keras import Model
-from keras import Sequential, layers, optimizers, losses, activations
-from typing import Tuple
+from tensorflow._api.v2.v2 import keras
 from pathlib import Path
 
 from preparations.compile_elements import CompileElements, History
@@ -8,26 +6,26 @@ from preparations.dataset_components.generator import NeighbourGenerator
 
 
 def train_model(
-    emb: layers.Embedding,
+    emb: keras.layers.Embedding,
     generator: NeighbourGenerator,
     comp_elements: CompileElements,
     epochs_num: int,
-) -> Tuple[Model, History]:
+) -> tuple[keras.Model, History]:
     vocab_size = emb.input_dim
 
     emb.trainable = False
-    model = Sequential(
+    model = keras.Sequential(
         [
             emb,
-            layers.Dense(vocab_size, activation=activations.sigmoid),
+            keras.layers.Dense(vocab_size, activation=keras.activations.sigmoid),
         ]
     )
 
     comp_elements.decay.set_steps_num(len(generator) * epochs_num)
 
     model.compile(
-        optimizer=optimizers.Adam(learning_rate=comp_elements.decay),  # type: ignore
-        loss=losses.binary_crossentropy,
+        optimizer=keras.optimizers.Adam(learning_rate=comp_elements.decay),  # type: ignore
+        loss=keras.losses.binary_crossentropy,
         metrics=[
             comp_elements.binary_accuracy_metric,
             comp_elements.bool_accuracy_metric,
@@ -39,12 +37,12 @@ def train_model(
 
 
 def execute(
-    emb: layers.Embedding,
+    emb: keras.layers.Embedding,
     generator: NeighbourGenerator,
     comp_elements: CompileElements,
     epochs_num: int,
     history_dir: Path,
-) -> Model:
+) -> keras.Model:
 
     model, history = train_model(emb, generator, comp_elements, epochs_num)
     history.save_history(history_dir)

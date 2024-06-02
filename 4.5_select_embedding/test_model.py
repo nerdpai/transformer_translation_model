@@ -1,12 +1,12 @@
-from tensorflow.keras import Model
-from typing import Tuple
+from tensorflow._api.v2.v2 import keras
+
 
 from preparations.dataset_components.generator import NeighbourGenerator
 
 
 def execute(
-    model: Model, test_gen: NeighbourGenerator
-) -> Tuple[list[float], list[str]]:
+    model: keras.Model, test_gen: NeighbourGenerator
+) -> tuple[list[float], list[str]]:
     metrics = model.evaluate(test_gen)  # type: ignore
     if not isinstance(metrics, list):
         metrics = [metrics]

@@ -1,10 +1,10 @@
 import matplotlib.pyplot as plt
 from matplotlib.axes import Axes
-from keras.callbacks import Callback
+from tensorflow._api.v2.v2 import keras
 from pathlib import Path
 
 
-class History(Callback):
+class History(keras.callbacks.Callback):
     def __init__(self):
         super().__init__()
         self.batch_history: dict[str, list] = {}
@@ -24,11 +24,11 @@ class History(Callback):
         for key in logs.keys():
             self.batch_history[f"{version}_{key}"].append(logs[key])
 
-    def on_train_batch_end(self, batch, logs={}):
-        self.__log(logs, "batch")
+    def on_train_batch_end(self, batch, logs=None):
+        self.__log(logs, "batch")  # type: ignore
 
-    def on_epoch_end(self, epoch, logs={}):
-        self.__log(logs, "epoch")
+    def on_epoch_end(self, epoch, logs=None):
+        self.__log(logs, "epoch")  # type: ignore
 
     def save_history(self, output_path: Path) -> None:
         output_path.mkdir(parents=True, exist_ok=True)

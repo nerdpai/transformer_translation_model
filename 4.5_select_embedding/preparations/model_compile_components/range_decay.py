@@ -1,8 +1,8 @@
-import tensorflow as tf
-from tensorflow.keras.optimizers.schedules import LearningRateSchedule  # type: ignore
+import tensorflow._api.v2.v2 as tf
+from tensorflow._api.v2.v2 import keras
 
 
-class RangedDecay(LearningRateSchedule):
+class RangedDecay(keras.optimizers.schedules.LearningRateSchedule):
     def __init__(self, initial_lr: float, final_lr: float):
         super().__init__()
         self.initial_lr: float = initial_lr
@@ -16,5 +16,5 @@ class RangedDecay(LearningRateSchedule):
         if self.decay is None:
             raise ValueError("steps_num is not set")
 
-        lr = self.initial_lr - self.decay * tf.cast(step, tf.float32)
+        lr = self.initial_lr - self.decay * tf.cast(step, tf.float32)  # type: ignore
         return tf.maximum(lr, tf.constant(self.final_lr, dtype=tf.float32))
