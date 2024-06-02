@@ -1,9 +1,5 @@
-from pathlib import Path
 import shutil
-
-PATH = Path("./")
-
-MB = 1024 * 1024
+from pathlib import Path
 
 
 def get_pathes(path: Path, extention: str, is_search_files: bool) -> list[Path]:
@@ -57,7 +53,9 @@ def concatenate(path: Path, extention: str) -> None:
         new_path.rename(path)
 
 
-if __name__ == "__main__":
+def main():
+    MB = 1024 * 1024
+
     choice = input("Enter your choice\n1 for split\n2 for concatenate\t: ")
 
     if choice not in ["1", "2"]:
@@ -81,3 +79,7 @@ if __name__ == "__main__":
 
     elif choice == "2":
         concatenate(path, extension)
+
+
+if __name__ == "__main__":
+    main()
