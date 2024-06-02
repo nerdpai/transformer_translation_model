@@ -1,4 +1,4 @@
-import tensorflow as tf
+import tensorflow._api.v2.v2 as tf
 import numpy as np
 
 
@@ -15,7 +15,7 @@ def negative_sampling(
     # multiplier = len(negative_sampling_table) / target_sum
     multiplier = len(negative_sampling_table)
 
-    sampling_table_t = sampling_table_t * multiplier
+    sampling_table_t = sampling_table_t * multiplier  # type: ignore
     sampling_table_t = sampling_table_t + epsilon
     sampling_table_t = tf.cumsum(sampling_table_t)
 

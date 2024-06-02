@@ -1,12 +1,13 @@
-from keras.utils import Sequence
-import math
-from pathlib import Path
 import datasets
 import tokenizers
 import numpy as np
 import h5py
+import math
+import tensorflow._api.v2.v2 as tf
+from tensorflow._api.v2.v2 import keras
+from pathlib import Path
 from tqdm import tqdm
-import tensorflow as tf
+
 
 import generator.tables.sampling_tables as st
 import generator.datasets.tokenize as td
@@ -43,14 +44,14 @@ class SkipGenSpecs:
         self.shuffle = shuffle
 
 
-class SkipGramsGenerator(Sequence):
+class SkipGramsGenerator(keras.utils.Sequence):
     def __init__(
         self,
         specs: SkipGenSpecs,
     ):
         self.TOKENIZED_COL_NAME = "tokenized"
         self.SKIPPED_COL_NAME = "skip_grams"
-        self.LABLES: np.ndarray = self.__get_lables(specs.batch_size, specs.num_ns)
+        self.LABLES: np.ndarray = self.__get_lables(specs.num_ns)
 
         self.dataset = specs.dataset
         self.column_with_text = specs.column_with_text
@@ -90,7 +91,7 @@ class SkipGramsGenerator(Sequence):
 
         self.on_epoch_end()
 
-    def __get_lables(self, batch_size: int, num_ns: int) -> np.ndarray:
+    def __get_lables(self, num_ns: int) -> np.ndarray:
         ones = np.ones((1,))
         zeros = np.zeros((num_ns,))
         return np.concatenate([ones, zeros], axis=0)
@@ -117,7 +118,7 @@ class SkipGramsGenerator(Sequence):
                 data = np.array(dset[start:end], dtype=dset.dtype)
                 data_tensor: tf.Tensor = tf.convert_to_tensor(data, dtype=dset.dtype)
                 data_tensor = tf.random.shuffle(data_tensor)
-                data = data_tensor.numpy()
+                data = data_tensor.numpy()  # type: ignore
                 dset[start:end] = data
 
     def __set_cur_len(self, cached_skip: Path, column_name: str) -> None:
@@ -164,7 +165,7 @@ class SkipGramsGenerator(Sequence):
         with h5py.File(self.skipped, "r") as h5f:
             dset: h5py.Dataset = h5f[self.SKIPPED_COL_NAME]  # type: ignore
             batch = dset[index * self.batch_size : (index + 1) * self.batch_size]
-            target = batch[:, 0]
+            target: np.ndarray = batch[:, 0]
             context = batch[:, 1:]
             labels = np.repeat(
                 np.expand_dims(self.LABLES, axis=0), target.shape[0], axis=0

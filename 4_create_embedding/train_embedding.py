@@ -2,7 +2,6 @@ from keras.callbacks import EarlyStopping
 from keras import optimizers, metrics, losses, utils
 from tokenizers import Tokenizer
 from pathlib import Path
-from typing import Tuple
 
 
 import generator.skip_grams_gen as gen
@@ -17,8 +16,8 @@ def train_word2vec(
     epochs_num: int,
     tokenizer: Tokenizer,
     pad_token: str,
-    callbacks: Tuple[History, RangedDecay, EarlyStopping],
-) -> Tuple[Word2Vec, History]:
+    callbacks: tuple[History, RangedDecay, EarlyStopping],
+) -> tuple[Word2Vec, History]:
     history, decay, early_stop = callbacks
 
     word2vec_model: Word2Vec = Word2Vec(vocab_size, embedding_dim)  # type: ignore
@@ -40,7 +39,7 @@ def execute(
     epochs_num: int,
     output_path: Path,
     pad_token: str,
-    callbacks: Tuple[History, RangedDecay, EarlyStopping],
+    callbacks: tuple[History, RangedDecay, EarlyStopping],
 ) -> None:
 
     model, history = train_word2vec(

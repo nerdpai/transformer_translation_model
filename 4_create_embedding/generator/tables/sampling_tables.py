@@ -1,6 +1,6 @@
 import datasets
 import numpy as np
-import tensorflow as tf
+import tensorflow._api.v2.v2 as tf
 from tqdm import tqdm
 
 
@@ -20,7 +20,9 @@ def create_sampling_tables(
     tokens_appearance = tf.zeros(vocab_size, dtype=tf.int64)
     for i in tqdm(range(0, len(dataset), batch_size), desc="Sample table creation"):
         batch = dataset[i : i + batch_size]
-        tokens = np.concatenate(batch[column_with_seqiences], dtype=np.int32)
+        tokens = np.concatenate(
+            batch[column_with_seqiences], dtype=np.int32
+        )  # ignore linter error
         tokens = tf.convert_to_tensor(tokens, dtype=tf.int32)
         unique, _, counts = tf.unique_with_counts(tokens, out_idx=tf.int64)
         indices = tf.expand_dims(unique, axis=-1)
@@ -33,7 +35,7 @@ def create_sampling_tables(
 
     frequency = tf.cast(tokens_appearance, dtype=tf.float64) / tf.cast(
         total_tokens, dtype=tf.float64
-    )
+    )  # type: ignore
     weight_frequency: tf.Tensor = tf.where(frequency == 0, 0, t / (frequency + 1e-8))
     positive_sampling = weight_frequency + tf.sqrt(weight_frequency)
 
