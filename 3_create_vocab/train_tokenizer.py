@@ -1,6 +1,6 @@
 import datasets
-import typing
 import pandas as pd
+from typing import Iterator
 from pathlib import Path
 from tokenizers import (
     models,
@@ -17,9 +17,9 @@ def __nan_remove(texts: list[str]) -> list[str]:
 
 def data_generator(
     dataset: datasets.Dataset, batch_size: int, content_column: str
-) -> typing.Iterator[list[str]]:
+) -> Iterator[list[str]]:
     for i in range(0, len(dataset), batch_size):
-        content: typing.List[str] = dataset[i : i + batch_size][content_column]
+        content: list[str] = dataset[i : i + batch_size][content_column]
 
         content = __nan_remove(content)
 

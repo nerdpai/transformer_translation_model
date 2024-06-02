@@ -106,10 +106,10 @@ def get_CC_mined_dataset(
 ) -> Dataset:
     dsets = []
     for lang in langs:
-        dir = cc_mined_dir / lang
+        directory = cc_mined_dir / lang
         lset: Dataset = load_dataset(
             "csv",
-            data_dir=str(dir),
+            data_dir=str(directory),
             split="train",
             cache_dir=str(cache_dir),
         )  # type: ignore
