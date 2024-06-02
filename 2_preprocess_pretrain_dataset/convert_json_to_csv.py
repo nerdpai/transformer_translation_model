@@ -6,9 +6,13 @@ import pandas as pd
 from pathlib import Path
 
 
-def calculate_rows_for_each_csv(json_file: Path, size_of_each_csv_in_mb: int) -> int:
-    MB_SIZE = 1024 * 1024
-    with open(json_file, "r+") as f:
+def calculate_rows_for_each_csv(
+    json_file: Path,
+    size_of_each_csv_in_mb: int,
+    encoding: str,
+) -> int:
+    MB_SIZE: int = 1024 * 1024
+    with open(json_file, "r+", encoding=encoding) as f:
         mm = mmap.mmap(f.fileno(), 0)
         num_objects = sum(1 for line in iter(mm.readline, b""))
     file_stats = json_file.stat()
@@ -17,15 +21,20 @@ def calculate_rows_for_each_csv(json_file: Path, size_of_each_csv_in_mb: int) ->
 
 
 def json_to_csv(
-    json_files: list[Path], csv_directory: Path, size_of_each_csv_in_mb: int = 30
+    json_files: list[Path],
+    csv_directory: Path,
+    keys_to_keep: list[str],
+    content_key: str,
+    encoding: str,
+    size_of_each_csv_in_mb: int = 30,
 ) -> None:
     last_file_i = 0
     for file in json_files:
-        rows_num = calculate_rows_for_each_csv(file, size_of_each_csv_in_mb)
+        rows_num = calculate_rows_for_each_csv(file, size_of_each_csv_in_mb, encoding)
 
-        with open(file, "r") as f:
+        with open(file, "r", encoding=encoding) as f:
             write_header = False
-            csv_file = Path("")
+            csv_file = None
             for i, line in enumerate(f):
                 if i % rows_num == 0:
                     csv_file = csv_directory / (str(last_file_i) + ".csv")
@@ -33,15 +42,17 @@ def json_to_csv(
                     last_file_i += 1
                 data = json.loads(line)
 
-                reduced_data = {
-                    key: data[key] for key in ("language", "raw_content") if key in data
-                }
+                reduced_data = {key: data[key] for key in keys_to_keep if key in data}
 
-                reduced_data["raw_content"] = reduced_data["raw_content"].replace(
+                reduced_data[content_key] = reduced_data[content_key].replace(
                     "\n", "\\n"
                 )
 
                 temp_df = pd.json_normalize(reduced_data)
+
+                if csv_file is None:
+                    raise ValueError("path for csv is None")
+
                 temp_df.to_csv(
                     csv_file,
                     mode="a",
@@ -66,7 +77,14 @@ def __is_prepared(save_dir: Path) -> bool:
     return False
 
 
-def execute(json_files: list[Path], csv_directory: Path, each_csv_mb: int) -> None:
+def execute(
+    json_files: list[Path],
+    csv_directory: Path,
+    keys_to_keep: list[str],
+    content_key: str,
+    encoding: str,
+    each_csv_mb: int,
+) -> None:
     is_place_good = __is_prepared(csv_directory)
     if is_place_good:
         return
@@ -76,4 +94,11 @@ def execute(json_files: list[Path], csv_directory: Path, each_csv_mb: int) -> No
 
     csv_directory.mkdir(parents=True, exist_ok=True)
 
-    json_to_csv(json_files, csv_directory, each_csv_mb)
+    json_to_csv(
+        json_files,
+        csv_directory,
+        keys_to_keep,
+        content_key,
+        encoding,
+        each_csv_mb,
+    )
