@@ -20,9 +20,8 @@ def create_sampling_tables(
     tokens_appearance = tf.zeros(vocab_size, dtype=tf.int64)
     for i in tqdm(range(0, len(dataset), batch_size), desc="Sample table creation"):
         batch = dataset[i : i + batch_size]
-        tokens = np.concatenate(
-            batch[column_with_seqiences], dtype=np.int32
-        )  # ignore linter error
+        # pylint: disable=unexpected-keyword-arg
+        tokens = np.concatenate(batch[column_with_seqiences], dtype=np.int32)
         tokens = tf.convert_to_tensor(tokens, dtype=tf.int32)
         unique, _, counts = tf.unique_with_counts(tokens, out_idx=tf.int64)
         indices = tf.expand_dims(unique, axis=-1)
