@@ -3,9 +3,9 @@ from tokenizers import Tokenizer
 from pathlib import Path
 
 
-import generator.skip_grams_gen as gen
-from word2vec import Word2Vec
-from preparations.callbacks import History, RangedDecay
+import module_4.generator.skip_grams_gen as gen
+from module_4.word2vec import Word2Vec
+from module_4.preparations.callbacks import History, RangedDecay
 
 
 def train_word2vec(

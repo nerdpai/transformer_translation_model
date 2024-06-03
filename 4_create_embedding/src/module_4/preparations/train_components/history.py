@@ -1,9 +1,8 @@
 import matplotlib.pyplot as plt
-import tensorflow._api.v2.v2 as tf
-from tensorflow._api.v2.v2 import keras
 from pathlib import Path
 from matplotlib.axes import Axes
 from matplotlib.figure import Figure
+from tensorflow._api.v2.v2 import keras
 
 
 class History(keras.callbacks.Callback):
@@ -54,36 +53,3 @@ class History(keras.callbacks.Callback):
             plt.title("model training")
             plt.savefig(output_path / f"{version}_history.png")
             plt.close()
-
-
-class RangedDecay(keras.optimizers.schedules.LearningRateSchedule):
-    def __init__(self, initial_lr: float, final_lr: float, steps_num: int):
-        super().__init__()
-        self.initial_lr: float = initial_lr
-        self.decay: float = (initial_lr - final_lr) / steps_num
-        self.final_lr: float = final_lr
-
-    def __call__(self, step):
-        lr = self.initial_lr - self.decay * tf.cast(step, tf.float32)  # type: ignore
-        return tf.maximum(lr, tf.constant(self.final_lr, dtype=tf.float32))
-
-
-def execute(
-    init_lr: float,
-    final_lr: float,
-    epochs_num: int,
-    parts_per_epoch: int,
-    part_size: int,
-    samples_per_line: int,
-    train_batch_size: int,
-    patience_for_epoch: int,
-) -> tuple[History, RangedDecay, keras.callbacks.EarlyStopping]:
-    history = History()
-    steps_num: int = (
-        epochs_num * parts_per_epoch * part_size * samples_per_line // train_batch_size
-    )
-    decay = RangedDecay(init_lr, final_lr, steps_num)
-    early_stopping = keras.callbacks.EarlyStopping(
-        monitor="loss", patience=patience_for_epoch
-    )
-    return history, decay, early_stopping

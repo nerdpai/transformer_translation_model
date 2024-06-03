@@ -1,4 +1,4 @@
-import generator.skip_grams_gen as gen
+import module_4.generator.skip_grams_gen as gen
 
 
 def execute(gen_specs: gen.SkipGenSpecs) -> gen.SkipGramsGenerator:

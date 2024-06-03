@@ -1,12 +1,12 @@
-import preparations.generator as prep_gen
-import preparations.tokenizer as prep_tokenizer
-import preparations.check_place as prep_check_place
-import preparations.dataset as prep_dataset
-import preparations.callbacks as prep_callbacks
-import preparations.set_random as prep_random
-import preparations.tf_config as prep_tf_config
-import train_embedding
-import changeable as ch
+import module_4.preparations.generator as prep_gen
+import module_4.preparations.tokenizer as prep_tokenizer
+import module_4.preparations.check_place as prep_check_place
+import module_4.preparations.dataset as prep_dataset
+import module_4.preparations.train_comps as train_comps
+import module_4.preparations.set_random as prep_random
+import module_4.preparations.tf_config as prep_tf_config
+import module_4.train_embedding as train_embedding
+import module_4.changeable as ch
 
 
 def train():
@@ -29,7 +29,7 @@ def train():
     generator_specs = ch.get_skip_gen_specs(dataset, tokenizer)
     generator = prep_gen.execute(generator_specs)
 
-    callbacks = prep_callbacks.execute(
+    callbacks = train_comps.execute(
         ch.INIT_LR,
         ch.FINAL_LR,
         ch.EPOCS_NUM,

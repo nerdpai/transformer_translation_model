@@ -4,8 +4,9 @@ import numpy as np
 from pathlib import Path
 from tqdm import tqdm
 
-import generator.tables.skip_grams as skip_grams
-from generator.tables.sampling_tables import SamplingTables
+
+import module_4.generator.tables.skip_grams as skip_grams
+from module_4.generator.tables.sampling_tables import SamplingTables
 
 __DTYPE = np.int32
 

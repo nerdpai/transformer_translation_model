@@ -9,9 +9,9 @@ from pathlib import Path
 from tqdm import tqdm
 
 
-import generator.tables.sampling_tables as st
-import generator.datasets.tokenize as td
-import generator.datasets.skip as sd
+import module_4.generator.tables.sampling_tables as st
+import module_4.generator.datasets.tokenize as td
+import module_4.generator.datasets.skip as sd
 
 
 class SkipGenSpecs:

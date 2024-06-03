@@ -3,8 +3,8 @@ from pathlib import Path
 from datasets import Dataset
 from tokenizers import Tokenizer
 
-from generator.skip_grams_gen import SkipGenSpecs
 
+from module_4.generator.skip_grams_gen import SkipGenSpecs
 
 SEED: int = 42
 
