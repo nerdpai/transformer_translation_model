@@ -1,9 +1,9 @@
-import preparations.dataset as prep_dataset
-import preparations.check_place as prep_check_place
-import preparations.tokenizer as prep_tokenizer
-import preparations.trainer as prep_trainer
-import train_tokenizer
-import changeable as ch
+import module_3.preparations.dataset as prep_dataset
+import module_3.preparations.check_place as prep_check_place
+import module_3.preparations.tokenizer as prep_tokenizer
+import module_3.preparations.trainer as prep_trainer
+import module_3.train_tokenizer as train_tokenizer
+import module_3.changeable as ch
 
 
 def train() -> None:
