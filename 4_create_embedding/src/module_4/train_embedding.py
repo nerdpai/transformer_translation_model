@@ -5,7 +5,7 @@ from pathlib import Path
 
 import module_4.generator.skip_grams_gen as gen
 from module_4.word2vec import Word2Vec
-from module_4.preparations.callbacks import History, RangedDecay
+from module_4.preparations.train_comps import History, RangedDecay
 
 
 def train_word2vec(
