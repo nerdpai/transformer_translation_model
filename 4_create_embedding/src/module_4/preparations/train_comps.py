@@ -15,7 +15,8 @@ def execute(
     part_size: int,
     samples_per_line: int,
     train_batch_size: int,
-    patience_for_epoch: int,
+    patience_in_epochs: int,
+    patience_monitor: str,
 ) -> tuple[History, RangedDecay, keras.callbacks.EarlyStopping]:
     history = History()
     steps_num: int = (
@@ -23,6 +24,6 @@ def execute(
     )
     decay = RangedDecay(init_lr, final_lr, steps_num)
     early_stopping = keras.callbacks.EarlyStopping(
-        monitor="loss", patience=patience_for_epoch
+        monitor=patience_monitor, patience=patience_in_epochs
     )
     return history, decay, early_stopping

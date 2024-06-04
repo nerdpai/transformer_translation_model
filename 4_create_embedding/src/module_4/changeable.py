@@ -81,4 +81,5 @@ PAD_TOKEN: str = "<pad>"
 ## callbacks
 INIT_LR: float = 10e-3
 FINAL_LR: float = 10e-5
-EPOCH_PATIENT: int = max(10, int(0.1 * EPOCS_NUM / __TRAINING_LOOPS_NUM))
+EPOCH_PATIENCE: int = max(10, int(0.1 * EPOCS_NUM / __TRAINING_LOOPS_NUM))
+PATIENCE_MONITOR: str = "loss"

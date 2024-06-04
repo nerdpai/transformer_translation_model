@@ -37,7 +37,8 @@ def train():
         ch.PART_SIZE,
         ch.SAMPLES_PER_LINE_,
         ch.TRAIN_BATCH_SIZE,
-        ch.EPOCH_PATIENT,
+        ch.EPOCH_PATIENCE,
+        ch.PATIENCE_MONITOR,
     )
 
     train_embedding.execute(
