@@ -1,14 +1,14 @@
 from tensorflow._api.v2.v2 import keras
 from pathlib import Path
 
-from preparations.compile_elements import CompileElements, History
-from preparations.dataset_components.generator import NeighbourGenerator
+from module_4_5.preparations.train_comps import TrainComponents, History
+from module_4_5.preparations.dataset_components.generator import NeighbourGenerator
 
 
 def train_model(
     emb: keras.layers.Embedding,
     generator: NeighbourGenerator,
-    comp_elements: CompileElements,
+    comp_elements: TrainComponents,
     epochs_num: int,
 ) -> tuple[keras.Model, History]:
     vocab_size = emb.input_dim
@@ -39,7 +39,7 @@ def train_model(
 def execute(
     emb: keras.layers.Embedding,
     generator: NeighbourGenerator,
-    comp_elements: CompileElements,
+    comp_elements: TrainComponents,
     epochs_num: int,
     history_dir: Path,
 ) -> keras.Model:

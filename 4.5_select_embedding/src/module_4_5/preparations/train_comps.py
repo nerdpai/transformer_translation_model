@@ -1,16 +1,16 @@
 from keras.callbacks import EarlyStopping
 
-from preparations.model_compile_components.history import History
-from preparations.model_compile_components.range_decay import RangedDecay
-from preparations.model_compile_components.bin_crossentropy_acc import (
+from module_4_5.preparations.train_components.history import History
+from module_4_5.preparations.train_components.ranged_decay import RangedDecay
+from module_4_5.preparations.train_components.bin_crossentropy_acc import (
     BinaryCrossentopyAccuracy,
 )
-from preparations.model_compile_components.bool_crossentropy_acc import (
+from module_4_5.preparations.train_components.bool_crossentropy_acc import (
     BoolCrossentopyAccuracy,
 )
 
 
-class CompileElements:
+class TrainComponents:
     def __init__(
         self,
         history: History,
@@ -29,14 +29,17 @@ class CompileElements:
 def execute(
     init_lr: float,
     final_lr: float,
-    patience_in_epoch: int,
-) -> CompileElements:
+    patience_in_epochs: int,
+    patience_monitor: str,
+) -> TrainComponents:
     history = History()
     decay = RangedDecay(init_lr, final_lr)
-    early_stopping = EarlyStopping(monitor="loss", patience=patience_in_epoch)
+    early_stopping = EarlyStopping(
+        monitor=patience_monitor, patience=patience_in_epochs
+    )
     binary_accuracy_metric = BinaryCrossentopyAccuracy()
     bool_accuracy_metric = BoolCrossentopyAccuracy()
 
-    return CompileElements(
+    return TrainComponents(
         history, decay, early_stopping, binary_accuracy_metric, bool_accuracy_metric
     )

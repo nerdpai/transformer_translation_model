@@ -3,11 +3,11 @@ from typing import Optional, Callable
 from datasets import Dataset
 from tokenizers import Tokenizer
 
-from preparations.dataset_components.fetch import get_train_test
-from preparations.dataset_components.extract_subset import get_subset
-from preparations.dataset_components.transform_data import transform
-from preparations.dataset_components.generator import NeighbourGenerator
-from preparations.dataset_components.h5_dset import H5Dset
+from module_4_5.preparations.dataset_components.fetch import get_train_test
+from module_4_5.preparations.dataset_components.extract_subset import get_subset
+from module_4_5.preparations.dataset_components.transform_data import transform
+from module_4_5.preparations.dataset_components.generator import NeighbourGenerator
+from module_4_5.preparations.dataset_components.h5_dset import H5Dset
 
 
 class FetcherSpecs:

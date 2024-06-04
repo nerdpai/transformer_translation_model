@@ -1,7 +1,7 @@
 from tensorflow._api.v2.v2 import keras
 
 
-from preparations.dataset_components.generator import NeighbourGenerator
+from module_4_5.preparations.dataset_components.generator import NeighbourGenerator
 
 
 def execute(

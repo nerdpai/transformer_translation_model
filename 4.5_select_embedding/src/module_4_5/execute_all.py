@@ -1,20 +1,20 @@
 from tensorflow._api.v2.v2 import keras
 
-import preparations.compile_elements as prep_compilements
-import preparations.check_place as prep_check_place
-import preparations.dataset as prep_dataset
-import preparations.embedding as prep_embedding
-import preparations.set_random as prep_random
-import preparations.tokenizer as prep_tokenizer
-import changeable as ch
+import module_4_5.preparations.train_comps as train_comps
+import module_4_5.preparations.check_place as prep_check_place
+import module_4_5.preparations.dataset as prep_dataset
+import module_4_5.preparations.embedding as prep_embedding
+import module_4_5.preparations.set_random as prep_random
+import module_4_5.preparations.tokenizer as prep_tokenizer
+import module_4_5.changeable as ch
 
-from specs_management.emb_train_specs import EmbTrainSpecs
-from specs_management.compare_specs import CompareSpecs
-from preparations.dataset_components.generator import NeighbourGenerator
+from module_4_5.specs_management.emb_train_specs import EmbTrainSpecs
+from module_4_5.specs_management.compare_specs import CompareSpecs
+from module_4_5.preparations.dataset_components.generator import NeighbourGenerator
 
-import train_predict_model as train_model
-import test_model
-import compare_models
+import module_4_5.train_predict_model as train_model
+import module_4_5.test_model as test_model
+import module_4_5.compare_models as compare_models
 
 
 def execute() -> None:
@@ -67,10 +67,11 @@ def train(train_spec: EmbTrainSpecs, train_gen: NeighbourGenerator) -> keras.Mod
 
     emb = prep_embedding.execute(train_spec.emb_path)
 
-    comp_elements = prep_compilements.execute(
+    comp_elements = train_comps.execute(
         init_lr=ch.INITIAL_LR,
         final_lr=ch.FINAL_LR,
-        patience_in_epoch=ch.PATINET_IN_EPOCHS,
+        patience_in_epochs=ch.PATIENCE_IN_EPOCHS,
+        patience_monitor=ch.PATIENCE_MONITOR,
     )
 
     history_dir = (ch.analitics_dir / "history") / train_spec.name

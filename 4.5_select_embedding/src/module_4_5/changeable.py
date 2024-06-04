@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from specs_management.create_specs import prepare_specs
+from module_4_5.specs_management.create_specs import prepare_specs
 
 
 SEED: int = 42
@@ -56,7 +56,8 @@ INITIAL_LR: float = 10**-3
 FINAL_LR: float = 10**-4
 
 EPOCHS_NUM: int = 5
-PATINET_IN_EPOCHS: int = 2
+PATIENCE_IN_EPOCHS: int = 2
+PATIENCE_MONITOR: str = "loss"
 
 analitics_dir = Path(
     # elsewhere

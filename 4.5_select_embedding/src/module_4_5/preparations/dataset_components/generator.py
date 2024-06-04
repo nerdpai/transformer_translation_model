@@ -3,7 +3,7 @@ import numpy as np
 from tensorflow._api.v2.v2 import keras
 
 
-from preparations.dataset_components.h5_dset import H5Dset
+from module_4_5.preparations.dataset_components.h5_dset import H5Dset
 
 
 class NeighbourGenerator(keras.utils.Sequence):

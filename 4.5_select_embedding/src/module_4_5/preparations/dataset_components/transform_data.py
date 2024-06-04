@@ -8,7 +8,7 @@ from tqdm import tqdm
 from transformers import PreTrainedTokenizerFast
 from pathlib import Path
 
-from preparations.dataset_components.h5_dset import H5Dset
+from module_4_5.preparations.dataset_components.h5_dset import H5Dset
 
 __DTYPE = np.int32
 
@@ -71,6 +71,7 @@ def __create_neighbour_samples(sequences: np.ndarray, window_size: int) -> np.nd
         sample = np.array(sample)
         sample[:, [0, window_size]] = sample[:, [window_size, 0]]
 
+        # pylint: disable=e1123
         samples = np.concatenate((samples, sample), axis=0, dtype=__DTYPE)
 
     return samples

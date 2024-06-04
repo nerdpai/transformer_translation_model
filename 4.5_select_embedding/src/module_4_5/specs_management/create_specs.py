@@ -1,7 +1,7 @@
 from pathlib import Path
 from copy import copy
 
-from specs_management.emb_train_specs import EmbTrainSpecs
+from module_4_5.specs_management.emb_train_specs import EmbTrainSpecs
 
 
 def __enlarge_for_fair_universal(

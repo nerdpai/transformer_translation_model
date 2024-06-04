@@ -4,7 +4,7 @@ from matplotlib.axes import Axes
 from matplotlib import colormaps
 from pathlib import Path
 
-from specs_management.compare_specs import CompareSpecs
+from module_4_5.specs_management.compare_specs import CompareSpecs
 
 
 def execute(comp_specs: list[CompareSpecs], analitics_dir: Path) -> None:
