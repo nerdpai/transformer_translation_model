@@ -22,7 +22,7 @@ emb_path = Path(
 # Models specs
 SAVE_MODEL: bool = False
 HEADS_NUM: int = 8
-TRANSFORMER_NUM: int = 1
+TRANSFORMER_NUM: int = 12
 LORA_NUM: int = 1
 LORA_RANK: int = 8
 LORA_ALPHA: int = 32
