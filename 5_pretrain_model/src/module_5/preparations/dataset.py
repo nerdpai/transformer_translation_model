@@ -117,7 +117,7 @@ def get_CC_mined_dataset(
         )  # type: ignore
         dsets.append(lset)
 
-    dset = concatenate_datasets(dsets)
+    dset: Dataset = concatenate_datasets(dsets)
     dset = dset.remove_columns(
         [col for col in dset.column_names if col != content_column]
     )
