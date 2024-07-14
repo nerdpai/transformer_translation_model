@@ -129,7 +129,7 @@ def get_model(
 
 if __name__ == "__main__":
     if prep_check_place.execute(ch.save_dir):
-        shutil.rmtree(ch.save_dir)
+        shutil.rmtree(ch.save_dir, ignore_errors=True)
         ch.save_dir.mkdir(parents=True, exist_ok=True)
 
         execute()
