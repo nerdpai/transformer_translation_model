@@ -16,6 +16,7 @@ import module_5.model.mbart_like_model as prep_model
 import module_5.changeable as ch
 
 import module_5.train_model as train_model
+import module_5.save_model as save_model
 import module_5.test_model as test_model
 import module_5.models_metrics as models_metrics
 
@@ -48,13 +49,17 @@ def execute() -> None:
         )
         model = get_model(model_specs, emb)
 
+        save_dir = ch.save_dir / model_specs.name
         model = train_model.execute(
             model,
             train_gen,
             train_comps,
             ch.EPOCHS,
-            ch.save_dir / model_specs.name,
+            save_dir,
         )
+
+        if ch.SAVE_MODEL:
+            save_model.execute(model, save_dir)
 
         metrics = test_model.execute(model, test_gen)
         test_results.append(models_metrics.ModelMetrics((model_specs.name, metrics)))
